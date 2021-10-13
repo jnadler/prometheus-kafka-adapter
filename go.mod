@@ -1,4 +1,4 @@
-module github.com/Telefonica/prometheus-kafka-adapter
+module github.com/jnadler/prometheus-kafka-adapter
 
 require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
