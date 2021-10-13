@@ -65,6 +65,16 @@ func main() {
 
 	producer, err := kafka.NewProducer(&kafkaConfig)
 
+	// read delivery reports and log errors
+	go func() {
+		for event := range producer.Events() {
+			producedMessage := event.(*kafka.Message)
+			if producedMessage.TopicPartition.Error != nil {
+				logrus.WithError(producedMessage.TopicPartition.Error).WithField("topic", producedMessage.TopicPartition.Topic).Error("failed to produce message to topic")
+			}
+		}
+	}()
+
 	if err != nil {
 		logrus.WithError(err).Fatal("couldn't create kafka producer")
 	}
