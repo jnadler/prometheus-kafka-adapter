@@ -11,7 +11,7 @@ ADD . /src/prometheus-kafka-adapter
 RUN go build -o /prometheus-kafka-adapter -ldflags '-w -extldflags "-static"'
 RUN go test ./...
 
-FROM alpine:3.13
+FROM docker.internal.digitalocean.com/base/debian-grande:latest
 
 COPY schemas/metric.avsc /schemas/metric.avsc
 COPY --from=build /prometheus-kafka-adapter /
