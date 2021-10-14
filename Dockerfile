@@ -8,7 +8,7 @@ RUN go mod download
 
 ADD . /src/prometheus-kafka-adapter
 
-RUN go build -o /prometheus-kafka-adapter -ldflags '-w -extldflags "-static"'
+RUN go build -o /prometheus-kafka-adapter
 RUN go test ./...
 
 FROM docker.internal.digitalocean.com/base/debian-grande:latest
