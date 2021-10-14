@@ -68,9 +68,18 @@ func main() {
 	// read delivery reports and log errors
 	go func() {
 		for event := range producer.Events() {
-			producedMessage := event.(*kafka.Message)
-			if producedMessage.TopicPartition.Error != nil {
-				logrus.WithError(producedMessage.TopicPartition.Error).WithField("topic", producedMessage.TopicPartition.Topic).Error("failed to produce message to topic")
+			// confluent-kafka-go docs say that this should be '*kafka.Message', but apparently it is 'kafka.Error'
+			produceError, ok := event.(kafka.Error)
+			if ok {
+				logrus.WithField("error_code", produceError.Code).Errorf("failed to produce message: %s", produceError.String())
+				produceError.String()
+			}
+
+			producedMessage, ok := event.(*kafka.Message)
+			if ok {
+				if producedMessage.TopicPartition.Error != nil {
+					logrus.WithError(producedMessage.TopicPartition.Error).WithField("topic", producedMessage.TopicPartition.Topic).Error("failed to produce message to topic")
+				}
 			}
 		}
 	}()
