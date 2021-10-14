@@ -33,7 +33,7 @@ func main() {
 		"compression.codec":   kafkaCompression,
 		"batch.num.messages":  kafkaBatchNumMessages,
 		"go.batch.producer":   true,  // Enable batch producer (for increased performance).
-		"go.delivery.reports": false, // per-message delivery reports to the Events() channel
+		"go.delivery.reports": true, // per-message delivery reports to the Events() channel
 	}
 
 	if kafkaSslClientCertFile != "" && kafkaSslClientKeyFile != "" && kafkaSslCACertFile != "" {
